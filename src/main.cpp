@@ -3,8 +3,8 @@
 
 using namespace std;
 
-string f_benchmark = "../../benchmark.txt";
-string f_name1 = "../../test1.txt";
+string f_benchmark = "../../communities.txt";
+string f_name1 = "../../jcb.txt";
 
 // get the size of the communities in a given file
 int* get_size (string filename, int comm_number, bool debug) {
@@ -29,7 +29,8 @@ int* get_size (string filename, int comm_number, bool debug) {
             }
         }
     }
-
+    if (debug)
+        cout << "Number of Communities: " << comm_number << endl;
     infile.close();
 
     if (debug)
@@ -141,7 +142,7 @@ float* compute_score(string benchmark_file, string compared_file, int comm_numbe
                     // new line in both the files
                     col_x = 0;
                     col_b = 0;
-                    if (row_x < comm_number && row_b < comm_number) {
+                    if (row_x < comm_number-1 && row_b < comm_number-1) {
                         row_b ++;
                         row_x ++;
                     } else {
@@ -161,7 +162,11 @@ float* compute_score(string benchmark_file, string compared_file, int comm_numbe
         } // for on col_b
 
         // give the score for every row of the file_x
-        score[row_x] = (float)(found+1)/(sizes_file_x[row_x]+1);
+        if (found != 0)
+            score[row_x] = (float)(found+1)/(sizes_benchmark[row_b]+1);
+        else
+            score = 0;
+
         row_x ++;
     } // for on row_b
 
@@ -176,7 +181,7 @@ float* compute_score(string benchmark_file, string compared_file, int comm_numbe
 int main() {
 
     bool debug = true;
-    int comm_number = 2;
+    int comm_number = 4;
     int file_numbers = 2; // number of files to compare: benchmark included
 
     float* points;
